@@ -1,0 +1,41 @@
+body {
+  background-color: #1d1e22; /** dark slate **/
+}
+
+.well {
+  background-color: #1d1e22; /** deep matte gray **/
+  border: none;
+  margin-bottom: -15px;
+}
+
+#title {
+  text-align: center;
+  color: #feda6a; /** are ya yellow **/
+  font-family: 'Cinzel', serif;
+}
+
+.row {
+    display:flex; /** Puts divs on same line.*/
+    justify-content:center; /** Centers div in middle of page **/
+    /*padding-bottom:10px;*/
+}
+
+#searchContainer {
+  width : 80%;
+  height: auto;
+  margin-right: 1%;
+}
+
+#table {
+  color : #d4d4dc;
+}
+
+#head{
+  color : #feda6a; /** are ya yellow **/
+}
+
+#button {
+  background-color: #feda6a; /** are ya yellow **/
+  color: #1d1e22; /** dark slate **/
+  border: none;
+}
