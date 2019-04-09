@@ -1,38 +1,13 @@
 /*global $*/
 
-/** FUNCTIONS **/
-function getSearchResults(){
-  $.ajax({
-
-      type: "GET",
-      // url: "getSearchResults.py",
-      // for local testing :)
-      url:  "http://127.0.0.1:5000/getSearchResults",
-      dataType: "json",
-      // data: { "": },
-
-      success: function(data,status) {
-          console.log(data["hello"]);
-          $("#test").html("<center>Success !!!</center>w");
-
-      },
-
-      complete: function(data,status) { //optional, used for debugging purposes
-          // console.log(status);
-          // console.log(data);
-      }
-
-  });//ajax
-}
-
 function addTrackToTable(track){
   let str = '<tr>'+
-            '<th scope="row"><input type="checkbox" name="download"></th>'+
-            '<td>' + track["trackName"] + '</td>' +
-            '<td>' + track["artistName"] + '</td>' +
-            '<td>' + track["collectionName"] + '</td>' +
-            '<td>' + track["trackId"] + '</td>' +
-         '</tr>';
+              '<th scope="row"><input type="checkbox" name="download" value="selected"></th>'+
+              '<td>' + track["trackName"] + '</td>' +
+              '<td>' + track["artistName"] + '</td>' +
+              '<td>' + track["collectionName"] + '</td>' +
+              '<td>' + track["trackId"] + '</td>' +
+            '</tr>';
   $("#results").append(str);
 }
 
@@ -41,16 +16,13 @@ function buildResults(data){
     // console.log("No Search Results...");
     $("#results").html("No Search Results...");
     $("#results").show();
-    return;
   }
-
-
   for(let i = 0; i < data["resultCount"]; i++){
     let temp = data["results"][i];
     if(temp["wrapperType"] == "track")
       addTrackToTable(temp);
-    else if(temp["wrapperType"] == "collection")
-      getSongsOffAlbum(temp);
+    // else if(temp["wrapperType"] == "collection")
+    //   getSongsOffAlbum(temp);
 
   }
   $("#results").show();
@@ -59,7 +31,6 @@ function buildResults(data){
 function generalSearch(query){
   $.ajax({
       type: "GET",
-
       url:  "https://itunes.apple.com/search",
       dataType: "json",
       data: {
@@ -89,6 +60,13 @@ $("#button").click(function(){
   generalSearch(query);
 
 });
+
+$("#download").on("click", function(){
+  console.log("changed");
+  // $.each($("input[name='download']:checked"), function(){            
+  //   console.log("this.val()");
+});
+// });
 
 
 /** MAIN **/

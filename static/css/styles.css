@@ -34,7 +34,7 @@ body {
   color : #feda6a; /** are ya yellow **/
 }
 
-#button {
+#button, #download {
   background-color: #feda6a; /** are ya yellow **/
   color: #1d1e22; /** dark slate **/
   border: none;

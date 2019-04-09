@@ -30,7 +30,7 @@ Desciption: Front end for a music downloading web app
         <h1 id="title">Downloader</h1>
       </div>
 
-      <!-- <div class="well"> -->
+      <!-- SEARCH FIELD -->
       <div class="container">
         <form>
           <div class="row">
@@ -40,25 +40,12 @@ Desciption: Front end for a music downloading web app
             <div class="col">
               <button type="button" class="btn btn-primary" id="button">Search</button>
             </div>
-
+            <div class="col">
+              <button type="button" class="btn btn-primary" id="download">Download</button>
+            </div>
           </div>
         <form>
       </div>
-
-        <form>
-          <center>
-            <div class="row" >
-                <!-- <label for="search" class="control-label">Search</label> -->
-                <!-- <input id="search" type="text" class="form-control" placeholder="Search..."> -->
-            </div>
-
-            <br>
-            <div class="row">
-              <!-- <button type="button" class="btn btn-primary" id="button">Search</button> -->
-            </div>
-            </center>
-        </form>
-      <!-- </div> -->
 
       <!-- RESULTS  -->
         <table class="table table-dark" id="table">
@@ -71,11 +58,86 @@ Desciption: Front end for a music downloading web app
               <th scope="col">id</th>
             </tr>
           </thead>
-          <tbody id="results">
+          <tbody id="results" class="results">
             <!-- TO BE FILLED  -->
           </tbody>
         </table>
 
-        <script src="{{ url_for('static', filename='js/functions.js') }}"></script>
+        <!-- <script src="{{ url_for('static', filename='js/functions.js') }}"></script> -->
+        <script>
+          /*global $*/
+
+function addTrackToTable(track){
+  let str = '<tr>'+
+              '<th scope="row"><input type="checkbox" name="download" value="selected"></th>'+
+              '<td>' + track["trackName"] + '</td>' +
+              '<td>' + track["artistName"] + '</td>' +
+              '<td>' + track["collectionName"] + '</td>' +
+              '<td>' + track["trackId"] + '</td>' +
+            '</tr>';
+  $("#results").append(str);
+}
+
+function buildResults(data){
+  if(data["resultCount"] == 0){
+    // console.log("No Search Results...");
+    $("#results").html("No Search Results...");
+    $("#results").show();
+  }
+  for(let i = 0; i < data["resultCount"]; i++){
+    let temp = data["results"][i];
+    if(temp["wrapperType"] == "track")
+      addTrackToTable(temp);
+    // else if(temp["wrapperType"] == "collection")
+    //   getSongsOffAlbum(temp);
+
+  }
+  $("#results").show();
+}
+
+function generalSearch(query){
+  $.ajax({
+      type: "GET",
+      url:  "https://itunes.apple.com/search",
+      dataType: "json",
+      data: {
+        "term": query,
+        "limit" : 200
+      },
+      success: function(data,status) {
+          console.log(data);
+          buildResults(data);
+          // $("#test").html("<center>Success !!!</center>w");
+      },
+      complete: function(data,status) { //optional, used for debugging purposes
+      }
+  });//ajax
+}
+
+/** LINKING **/
+$("#button").click(function(){
+  // console.log("Click");
+  // console.log($("#search").val().toLowerCase());
+  // console.log("option: " + $("#menu").val());
+
+  $("#results").html("");
+  $("#table").show();
+
+  let query = $("#search").val().toLowerCase();
+  generalSearch(query);
+
+});
+
+$("#download").on("click", function(){
+  console.log("changed");
+  $.each($("input[name='download']:checked"), function(){            
+    console.log("this.val()");
+  });
+});
+
+
+/** MAIN **/
+$("table").hide();
+        </script>
     </body>
 </html>
