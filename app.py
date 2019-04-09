@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
@@ -8,10 +8,12 @@ bootstrap = Bootstrap(app)
 def index():
 	return render_template("index.html")
 
-@app.route('/test')
+@app.route('/download')
 def test():
-	return "Hello from test"
+	return jsonify({"test":1})
+
+	
 
 
 if __name__=='__main__':
-    app.run()
+    app.run(debug=True)

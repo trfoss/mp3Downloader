@@ -68,8 +68,10 @@ Desciption: Front end for a music downloading web app
           /*global $*/
 
 function addTrackToTable(track){
+  let query = track["trackName"] + " " + track["artistName"];
+
   let str = '<tr>'+
-              '<th scope="row"><input type="checkbox" name="download" value="selected"></th>'+
+              '<th scope="row"><input type="checkbox" name="download" value="' + query + '"></th>'+
               '<td>' + track["trackName"] + '</td>' +
               '<td>' + track["artistName"] + '</td>' +
               '<td>' + track["collectionName"] + '</td>' +
@@ -130,9 +132,27 @@ $("#button").click(function(){
 
 $("#download").on("click", function(){
   console.log("changed");
+  let queries = Array();
   $.each($("input[name='download']:checked"), function(){            
-    console.log("this.val()");
+    queries.push($(this).val());
   });
+  console.log(queries);
+
+  $.ajax({
+      type: "GET",
+      url:  "http://127.0.0.1:5000/download",
+      dataType: "json",
+      data: {
+        "queries": queries,
+      },
+      success: function(data,status) {
+          console.log(data);
+          
+      },
+      complete: function(data,status) { //optional, used for debugging purposes
+      }
+  });//ajax  
+
 });
 
 
