@@ -3,7 +3,7 @@
 function addTrackToTable(track){
   let str = '<tr>'+
               '<th scope="row"><input type="checkbox" name="download" value="selected"></th>'+
-              '<td>' + track["trackName"] + '</td>' +
+              '<td id="track">' + track["trackName"] + '</td>' +
               '<td>' + track["artistName"] + '</td>' +
               '<td>' + track["collectionName"] + '</td>' +
               '<td>' + track["trackId"] + '</td>' +
@@ -38,7 +38,7 @@ function generalSearch(query){
         "limit" : 200
       },
       success: function(data,status) {
-          console.log(data);
+          // console.log(data);
           buildResults(data);
           // $("#test").html("<center>Success !!!</center>w");
       },
@@ -62,7 +62,7 @@ $("#button").click(function(){
 });
 
 $("#download").on("click", function(){
-  console.log("changed");
+  console.log("download button");
   // $.each($("input[name='download']:checked"), function(){            
   //   console.log("this.val()");
 });

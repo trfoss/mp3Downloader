@@ -13,7 +13,8 @@ def index():
 def test():
 	# need to test for empty queries
 	# print("QUERIES:",request.args.getlist('queries[]'))
-	download(request.args.getlist('queries[]'))
+	# download(request.args.getlist('queries[]'))
+	# print('queries', request.args.getlist('queries[]'))
 	return jsonify({"test":1})
 
 if __name__=='__main__':
