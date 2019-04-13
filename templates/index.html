@@ -97,6 +97,21 @@ function buildResults(data){
   $("#results").show();
 }
 
+function getQueries(){
+  let queries = [];
+  $.each($("input[name='download']:checked"), function(){
+    
+    let curObj = {
+      "track" : $("#track").html(),
+      "artist" : $("#artist").html(),
+      "album" : $("#album").html(),
+      "id" : $("#id").html(),
+    };
+    queries.push(curObj);
+  });
+  return queries;
+}
+
 function generalSearch(query){
   $.ajax({
       type: "GET",
@@ -131,53 +146,12 @@ $("#button").click(function(){
 });
 
 $("#download").click(function(){
-  console.log("DL CLICKED");
-
-  $.each($("input[name='download']:checked"), function(){
-    console.log($("#track").html());
-    let curObj = {
-      "track" : $("#track").html(),
-      "artist" : $("#artist").html(),
-      "album" : $("#album").html(),
-      "id" : $("#id").html(),
-
-    };
-    console.log(curObj);
-  });
+  // console.log("DL CLICKED");
+  let queries = getQueries();
+  console.log(queries);
+  
+  
 });
-
-// $("#download").on("click", function(){
-//   console.log("DL CLICK");
-//   let queries = Array();
-//   // $.each($("input[name='download']:checked"), function(){
-//   //   console.log($("#track").html());
-//   //   let curObj = {
-//   //     "track" : $("#track").html()
-//   //   };
-//   //   // curObj["track"] = $("#track").html();
-//   //   // curObj["artist"] = $("#artist").html();
-//   //   // curObj["album"] = $("#album").html();
-//   //   // curObj["id"] = $("#id").html();
-//   //   console.log(curObj);          
-//     // queries.push($(this).val());
-//   });
-  // console.log(queries);
-
-  // $.ajax({
-  //     type: "GET",
-  //     url:  "http://127.0.0.1:5000/download",
-  //     dataType: "json",
-  //     data: {
-  //       "queries": queries,
-  //     },
-  //     success: function(data,status) {
-  //         console.log(data);
-  //     },
-  //     complete: function(data,status) { //optional, used for debugging purposes
-  //     }
-  // });//ajax  
-
-// });
 
 
 /** MAIN **/
