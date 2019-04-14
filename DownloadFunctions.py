@@ -16,12 +16,10 @@ def get_soup(url):
     """
     Returns a BeautifulSoup object.
     """
-    print("GETTING SOUP")
     context = ssl._create_unverified_context()
     req = Request(url, headers={'User-Agent':'Mozilla/5.0'})
     resp = urlopen(req, context=context)
     soup = BeautifulSoup(resp.read(), 'lxml')
-    print("EHLLO")
     return soup
 
 def get_url(search):
@@ -31,24 +29,19 @@ def get_url(search):
     Scrapes youtube for a video that has
     track and artist in the name.
     """
-    print("GETTING URL")
     query = urllib.parse.quote(search)
     url = "https://www.youtube.com/results?search_query=" + query
     soup = get_soup(url)
     search_results = []
     for vid in soup.findAll(attrs={'class':'yt-uix-tile-link'}):
-        # print("HELLO")
         search_results.append('https://www.youtube.com' + vid['href'])
-    print("SEARCH RESULTS", search_results)
-    return search_results[0]
-    # return search_results
+    return search_results[1]
 
 def get_ydl_obj():
     """
     Returns a youtube-dl object with
     the specified parameters.
     """
-    print("GETTING YDL")
     ydl_opts = {
                 'format': 'bestaudio/best', # get best audio
                 'outtmpl': 'YDL/%(id)s.%(ext)s', # sets output template
@@ -69,12 +62,9 @@ def download(queryDict):
     """
     Downloads songs from youtube.
     """
-    print("QUERIES", queryDict)
     # for song in queries:
     ydl = get_ydl_obj()
     url = get_url(queryDict['title'] + " " + queryDict['artist'])
-    print("URL", url)
-
     ydl.download([url])
     path = glob.glob("YDL/*.mp3")[0]
     set_data(path, queryDict)
@@ -88,7 +78,7 @@ def set_data(path, song):
     Sets the ID3 meta data of the MP3 file
     found at the end of path.
 
-    Song must be a track object.
+    Song must be a dict
     """
     new_song = ID3(path)
     new_song.delete()
@@ -165,9 +155,9 @@ def mv_dir_mac(path, song):
 """
 MAIN
 """
-test = {
-    'title':'future development', 
-    'artist':'del the funkee homosapien',
-    'album':'future development'
-}
-download(test)
+# test = {
+#     'title':'future development', 
+#     'artist':'del the funkee homosapien',
+#     'album':'future development'
+# }
+# download(test)

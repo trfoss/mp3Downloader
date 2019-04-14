@@ -18,7 +18,7 @@ def test():
 		'cover': None, 
 		'genre': None 
 	}
-	download()
+	download(temp)
 	return jsonify({"test":1})
 
 if __name__=='__main__':
