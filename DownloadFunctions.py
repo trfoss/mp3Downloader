@@ -10,16 +10,7 @@ from PIL import Image
 from io import BytesIO
 """
 Torin Foss | tfoss@csumb.edu | 2018
-Downloader_Functions:
-Contains methods to search the iTunes API for a single
-track, all tracks on an album, all albums with a given
-name, a single track of an album, and all tracks by an artist.
-Also contains methods to download songs from Youtube
-with the youtube-dl module.
-Disclaimer: Meant for educational purposes only. We are
-not responsible for how others use our software.
 """
-
 
 def get_soup(url):
     """
@@ -63,7 +54,7 @@ def get_ydl_obj():
                 'outtmpl': 'YDL/%(id)s.%(ext)s', # sets output template
                 'nocheckcertificate': True, # bypasses certificate check
                 'noplaylist' : True, # won't download playlists
-                'quiet': True, #suppress messages in command line
+                # 'quiet': True, #suppress messages in command line
                 'postprocessors':
                     [{
                     'key': 'FFmpegExtractAudio',
@@ -74,24 +65,21 @@ def get_ydl_obj():
     ydl = youtube_dl.YoutubeDL(ydl_opts)
     return ydl
 
-def download(queries):
+def download(queryDict):
     """
     Downloads songs from youtube.
     """
-    print("QUERIES", queries)
+    print("QUERIES", queryDict)
     # for song in queries:
     ydl = get_ydl_obj()
-    url = get_url(queries[0])
+    url = get_url(queryDict['title'] + " " + queryDict['artist'])
     print("URL", url)
-    # results = ydl.extract_info("ytsearch:del the funky homosapien future development")
-    # print(results["entries"][0]["webpage_url"])
 
-    # print(url[1])
     ydl.download([url])
     path = glob.glob("YDL/*.mp3")[0]
-    set_data(path, song)
-    set_cover_art(path, song)
-    set_file_path(path, song)
+    set_data(path, queryDict)
+    # set_cover_art(path, queryDict)
+    set_file_path(path, queryDict)
 
 
 
@@ -104,10 +92,10 @@ def set_data(path, song):
     """
     new_song = ID3(path)
     new_song.delete()
-    new_song.add(TIT2(encoding=3, text=song.track_name))
-    new_song.add(TPE1(encoding=3, text=song.artist_name))
-    new_song.add(TALB(encoding=3, text=song.collection_name))
-    new_song.add(TCON(encoding=3, text=song.primary_genre_name))
+    new_song.add(TIT2(encoding=3, text=song['title']))
+    new_song.add(TPE1(encoding=3, text=song['artist']))
+    new_song.add(TALB(encoding=3, text=song['album']))
+    # new_song.add(TCON(encoding=3, text=song.primary_genre_name))
     new_song.save()
     return
 
@@ -154,7 +142,7 @@ def mv_dir_windows(path, song):
     old_path = '"'+path+'"'
     os.system("move %s %s" % (old_path, new_path.replace(" ", "_")))
     return
-    return
+
 
 def mv_dir_mac(path, song):
     """
@@ -162,13 +150,13 @@ def mv_dir_mac(path, song):
     and moving files for windows.
     """
     # make dir with artist name
-    new_dir = '"' + 'Fixed/'+song.artist_name+ '/' + '"'
+    new_dir = '"' + 'Fixed/'+song['artist']+ '/' + '"'
     os.system("mkdir -p %s" % (new_dir.replace(" ", "_")))
     # make dir with album name
-    new_dir = '"' + 'Fixed/'+song.artist_name+ '/'+ song.collection_name+ '/' +'"'
+    new_dir = '"' + 'Fixed/'+song['artist']+ '/'+ song['album']+ '/' +'"'
     os.system("mkdir -p %s" % (new_dir.replace(" ", "_")))
     # add song to album dir
-    new_path = "Fixed/"+song.artist_name+ "/"+ song.collection_name+ "/"+song.track_name+".mp3"
+    new_path = "Fixed/"+song['artist']+ "/"+ song['album']+ "/"+song['title']+".mp3"
     new_path = '"'+new_path+'"'
     old_path = '"'+path+'"'
     os.system("mv %s %s" % (old_path, new_path.replace(" ", "_")))
@@ -177,4 +165,9 @@ def mv_dir_mac(path, song):
 """
 MAIN
 """
-# download(["future development del the funkee homosapien"])
+test = {
+    'title':'future development', 
+    'artist':'del the funkee homosapien',
+    'album':'future development'
+}
+download(test)

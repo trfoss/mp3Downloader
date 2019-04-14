@@ -148,10 +148,33 @@ $("#button").click(function(){
 $("#download").click(function(){
   // console.log("DL CLICKED");
   let queries = getQueries();
-  console.log(queries);
-  
+  // console.log(query);
+  // post isnt working
+  // need to be able to pass an array to only hit API once
+  for(let i = 0; i < queries.length; i++){
+
+    $.ajax({
+      type: "GET",
+      url:  "/download",
+      dataType: "json",
+      data: {
+        "query": queries[i],
+      },
+      success: function(data,status) {
+          console.log(data);
+          // buildResults(data);
+          // $("#test").html("<center>Success !!!</center>w");
+      },
+      complete: function(data,status) { //optional, used for debugging purposes
+      }
+    });//ajax
+
+  }
+
+
   
 });
+  
 
 
 /** MAIN **/

@@ -1,2 +1,8 @@
 flask
 flask-bootstrap
+bs4
+mutagen
+youtube-dl
+requests
+pillow
+lxml
